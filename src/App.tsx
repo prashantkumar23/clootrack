@@ -1,9 +1,10 @@
-import { Fragment, useEffect, useState } from "react";
-import axios from "axios";
+import { Fragment, useEffect } from "react";
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryPie } from "victory";
 import { Container, Typography } from "@mui/material";
+import { useActions } from "./hooks/use-actions";
+import { useTypedSelector } from "./hooks/use-typed-selector";
 
-interface Chart {
+export interface Chart {
   type: "Bar" | "Pie";
   elements: number[];
 }
@@ -26,28 +27,35 @@ function getRandomColor(length: number) {
 }
 
 function App() {
-  const [chartData, setChartData] = useState<[] | Chart[]>([]);
-
-  async function fetchChartData() {
-    const chartData = await axios.get<Chart[]>(
-      "https://s3-ap-southeast-1.amazonaws.com/he-public-data/chart2986176.json"
-    );
-
-    return chartData.data;
-  }
+  const { fetchChart } = useActions();
+  const chartData = useTypedSelector((state) => state);
+  console.log("Chart Data", chartData);
 
   useEffect(() => {
-    fetchChartData().then((chartData) => setChartData(chartData));
-  }, []);
+    fetchChart();
+  }, [fetchChart]);
+
+  // return (
+  //   <div>
+  //     {!chartData.charts?.loading && chartData.charts!.data.length > 0 ? (
+  //       <div>{chartData.charts?.data.toString()}</div>
+  //     ) : null}
+  //   </div>
+  // );
 
   return (
     <Container maxWidth="sm">
-      {chartData.length > 0 ? (
+      {!chartData.charts?.loading && chartData.charts!.data.length > 0 ? (
         <Fragment>
-          {chartData.map((chartObj, index) => {
+          {chartData.charts!.data.map((chartObj, index) => {
             if (chartObj.type === "Bar") {
               return (
-                <VictoryChart domainPadding={100} width={400} height={200}>
+                <VictoryChart
+                  domainPadding={100}
+                  width={400}
+                  height={200}
+                  key={index}
+                >
                   <VictoryAxis
                     // tickValues specifies both the number of ticks and where
                     // they are placed on the axis
@@ -90,12 +98,7 @@ function App() {
               );
             } else {
               return (
-                <VictoryPie
-                  width={200}
-                  height={200}
-                  data={chartObj.elements}
-                  labelComponent={<Typography>hYe</Typography>}
-                />
+                <VictoryPie width={200} height={200} data={chartObj.elements} />
               );
             }
           })}
