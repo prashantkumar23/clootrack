@@ -1,12 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import axios from "axios";
-import {
-  VictoryAxis,
-  VictoryBar,
-  VictoryChart,
-  VictoryLabel,
-  VictoryPie,
-} from "victory";
+import { VictoryAxis, VictoryBar, VictoryChart, VictoryPie } from "victory";
 import { Container, Typography } from "@mui/material";
 
 interface Chart {
