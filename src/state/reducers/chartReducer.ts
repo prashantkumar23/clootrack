@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { Chart } from '../../App';
+import { Chart } from '../../types';
 import { ActionType } from '../action-types';
 import { Action } from '../actions';
 
@@ -32,6 +32,11 @@ const reducer = produce((state: ChartState = initialState, action: Action) => {
         case ActionType.FETCH_CHART_ERROR:
             state.loading = false;
             state.error = action.payload;
+
+            return state;
+        case ActionType.CHART_UPDATE_BUTTON_CLICKED:
+            const { index, value, positionOfValueInElements } = action.payload
+            state.data[index].elements[positionOfValueInElements] = value
 
             return state;
         default:

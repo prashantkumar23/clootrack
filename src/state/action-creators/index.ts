@@ -1,12 +1,27 @@
 import { Dispatch } from 'redux';
 import axios from 'axios';
 import { ActionType } from '../action-types';
+import {
+    ChartUpdateButtonClickAction
+} from '../actions';
 
 import {
     Action,
 } from '../actions';
+import { Chart } from '../../types';
 
-import { Chart } from '../../App'
+
+
+export const chart_update_button_clicked = (index: number, value: number, positionOfValueInElements: number): ChartUpdateButtonClickAction => {
+    return {
+        type: ActionType.CHART_UPDATE_BUTTON_CLICKED,
+        payload: {
+            index,
+            value,
+            positionOfValueInElements
+        },
+    };
+}
 
 export const fetchChart = () => {
     return async (dispatch: Dispatch<Action>) => {

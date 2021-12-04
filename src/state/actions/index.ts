@@ -1,4 +1,4 @@
-import { Chart } from '../../App';
+import { Chart } from '../../types';
 import { ActionType } from '../action-types';
 
 export interface FetchChartAction {
@@ -16,7 +16,19 @@ export interface FetchChartErrorAction {
     payload: string;
 }
 
+export interface ChartUpdateButtonClickAction {
+    type: ActionType.CHART_UPDATE_BUTTON_CLICKED;
+    payload: {
+        index: number;
+        value: number;
+        positionOfValueInElements: number;
+    };
+}
+
+
+
 export type Action =
     | FetchChartAction
     | FetchChartCompleteAction
     | FetchChartErrorAction
+    | ChartUpdateButtonClickAction
